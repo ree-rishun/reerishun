@@ -1,86 +1,202 @@
 <template>
   <div>
-    <h2>資格</h2>
-    <ul>
-      <li>
-        【国家資格】<br>基本情報技術者
-      </li>
-      <li>WEBデザイナー検定<br>エキスパート</li>
-      <li>情報活用試験1級</li>
-      <li>情報システム試験<br>プログラマ認定</li>
-      <li>情報システム試験<br>システムエンジニア認定</li>
-    </ul>
-
-    <h2>受賞</h2>
-    <ul>
-      <li>OpenHack2020<br>優秀賞 受賞</li>
-      <li>SDLアプリコンテスト2020ハッカソン<br>最優秀賞 受賞</li>
-      <li>にいがたデジコングランプリ<br>オープンデータ活用部門<br>優秀賞 受賞</li>
-      <li>OthloHack<br>A-team賞 受賞</li>
-    </ul>
-
-    <h2>技術</h2>
     <h3>FrontEnd</h3>
-    <ul>
-      <li>
+    <ul class="skill-list">
+      <li v-for="skillparam in skill.frontend" :key="skillparam['id']">
         <v-progress-circular
                 :indeterminate="false"
-                :rotate="270"
-                :size="20"
-                :value="40"
-                :width="4"
-                color="#000000"
+                :rotate="progress.rotate"
+                :size="progress.size"
+                :value="skillparam['value'] * progress.load / 100"
+                :width="progress.width"
+                :color="skillparam['color']"
         >
         </v-progress-circular>
-        Vue.js
+        {{ skillparam['title'] }}
       </li>
-      <li>SCSS</li>
-      <li>Tailwind.css</li>
-      <li>HTML</li>
-      <li>Pug</li>
-      <li>WordPress</li>
     </ul>
     <h3>BackEnd</h3>
-    <ul>
-      <li>Laravel</li>
-      <li>Ruby on Rails</li>
-      <li>Node.js</li>
-      <li>Python</li>
-      <li>Java</li>
-      <li>C / C++</li>
+    <ul class="skill-list">
+      <li v-for="skillparam in skill.backend" :key="skillparam['id']">
+        <v-progress-circular
+                :indeterminate="false"
+                :rotate="progress.rotate"
+                :size="progress.size"
+                :value="skillparam['value'] * progress.load / 100"
+                :width="progress.width"
+                :color="skillparam['color']"
+        >
+        </v-progress-circular>
+        {{ skillparam['title'] }}
+      </li>
+    </ul>
+    <h3>Language</h3>
+    <ul class="skill-list">
+      <li v-for="skillparam in skill.language" :key="skillparam['id']">
+        <v-progress-circular
+                :indeterminate="false"
+                :rotate="progress.rotate"
+                :size="progress.size"
+                :value="skillparam['value'] * progress.load / 100"
+                :width="progress.width"
+                :color="skillparam['color']"
+        >
+        </v-progress-circular>
+        {{ skillparam['title'] }}
+      </li>
     </ul>
     <h3>Database</h3>
-    <ul>
-      <li>MySQL</li>
-      <li>OracleDatabase</li>
-      <li>ScyllaDB</li>
+    <ul class="skill-list">
+      <li v-for="skillparam in skill.database" :key="skillparam['id']">
+        <v-progress-circular
+                :indeterminate="false"
+                :rotate="progress.rotate"
+                :size="progress.size"
+                :value="skillparam['value'] * progress.load / 100"
+                :width="progress.width"
+                :color="skillparam['color']"
+        >
+        </v-progress-circular>
+        {{ skillparam['title'] }}
+      </li>
     </ul>
     <h3>Cloud</h3>
-    <ul>
-      <li>Firebase</li>
-      <li>AWS</li>
-      <li>GCP</li>
+    <ul class="skill-list">
+      <li v-for="skillparam in skill.cloud" :key="skillparam['id']">
+        <v-progress-circular
+                :indeterminate="false"
+                :rotate="progress.rotate"
+                :size="progress.size"
+                :value="skillparam['value'] * progress.load / 100"
+                :width="progress.width"
+                :color="skillparam['color']"
+        >
+        </v-progress-circular>
+        {{ skillparam['title'] }}
+      </li>
     </ul>
     <h3>Other</h3>
-    <ul>
-      <li>Fusion 360</li>
-      <li>Photoshop</li>
-      <li>Illustrator</li>
-      <li>PremierePro</li>
+    <ul class="skill-list">
+      <li v-for="skillparam in skill.other" :key="skillparam['id']">
+        <v-progress-circular
+                :indeterminate="false"
+                :rotate="progress.rotate"
+                :size="progress.size"
+                :value="skillparam['value'] * progress.load / 100"
+                :width="progress.width"
+                :color="skillparam['color']"
+        >
+        </v-progress-circular>
+        {{ skillparam['title'] }}
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+  import firebase from "firebase";
     export default {
-        name: "skill"
+        name: "skill",
+        data(){
+            return{
+                progress:{
+                    width: 3,
+                    size: 25,
+                    rotate: 270,
+                    load: 0,
+                    anime: '',
+                },
+                skill:{
+                    frontend: [],
+                    backend: [],
+                    language: [],
+                    cloud: [],
+                    database: [],
+                    other: [],
+                }
+            }
+        },
+        methods:{
+          progress_anime(){
+              console.log(this.progress.load);
+              if(this.progress.load === 100){
+                  clearInterval(this.progress.anime);
+              }
+              else{
+                  this.progress.load = this.progress.load + 10;
+              }
+          },
+            start_anime(){
+                this.progress.anime = setInterval(
+                    this.progress_anime,
+                    100
+                );
+            },
+            window:onload = function() {
+              console.log('hello');
+                this.start_anime();
+            },
+        },
+        mounted() {
+            firebase
+                .database()
+                .ref("skill/frontend")
+                .on("child_added", snapshot => {
+                    this.skill.frontend.push(snapshot.val());
+                });
+            firebase
+                .database()
+                .ref("skill/backend")
+                .on("child_added", snapshot => {
+                    this.skill.backend.push(snapshot.val());
+                });
+            firebase
+                .database()
+                .ref("skill/cloud")
+                .on("child_added", snapshot => {
+                    this.skill.cloud.push(snapshot.val());
+                });
+            firebase
+                .database()
+                .ref("skill/language")
+                .on("child_added", snapshot => {
+                    this.skill.language.push(snapshot.val());
+                });
+            firebase
+                .database()
+                .ref("skill/database")
+                .on("child_added", snapshot => {
+                    this.skill.database.push(snapshot.val());
+                });
+            firebase
+                .database()
+                .ref("skill/other")
+                .on("child_added", snapshot => {
+                    this.skill.other.push(snapshot.val());
+                });
+        }
     }
 </script>
 
 <style lang="scss" scoped>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
   h2{
     text-align: center;
     font-family: 'Noto Sans JP', sans-serif;
+  }
+  h3{
+    text-align: center;
+    font-family: 'Poiret One', cursive;
+    margin-top: 30px;
+  }
+  .skill-list{
+    text-align: left;
+    li{
+      font-family: 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      width: 40%;
+      margin: 20px 0 20px 10%;
+    }
   }
 </style>
