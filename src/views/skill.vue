@@ -118,7 +118,6 @@
         },
         methods:{
           progress_anime(){
-              console.log(this.progress.load);
               if(this.progress.load === 100){
                   clearInterval(this.progress.anime);
               }
@@ -129,12 +128,8 @@
             start_anime(){
                 this.progress.anime = setInterval(
                     this.progress_anime,
-                    100
+                    200
                 );
-            },
-            window:onload = function() {
-              console.log('hello');
-                this.start_anime();
             },
         },
         mounted() {
@@ -174,6 +169,9 @@
                 .on("child_added", snapshot => {
                     this.skill.other.push(snapshot.val());
                 });
+        },
+        updated() {
+            this.start_anime();
         }
     }
 </script>
