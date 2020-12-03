@@ -13,8 +13,10 @@
 
     <h2>受賞</h2>
     <ul>
-      <li>JPHACKS Hacking Sprint<br>Cブロック 2位</li>
-      <li>OpenHack2020<br>優秀賞 受賞</li>
+      <li>JPHACKS2020 AwardDay<br>NTTレゾナント賞</li>
+      <li>JPHACKS2020 AwardDay<br>STUDIO ARCANA賞</li>
+      <li>JPHACKS2020 Hacking Sprint<br>Cブロック 2位</li>
+      <li>OpenHackU2020<br>優秀賞 受賞</li>
       <li>SDLアプリコンテスト2020ハッカソン<br>最優秀賞 受賞</li>
       <li>にいがたデジコングランプリ<br>オープンデータ活用部門<br>優秀賞 受賞</li>
       <li>OthloHack<br>A-team賞 受賞</li>
